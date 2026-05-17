@@ -195,14 +195,61 @@ function deleteMaid(id) {
 searchLocation.addEventListener('input', loadMaids);
 filterWorkType.addEventListener('change', loadMaids);
 
-// Initial Load
+// Initial Load & Custom Validations
 document.addEventListener('DOMContentLoaded', () => {
-    // Optional: Add some dummy data if empty for demo purposes
-    // (As requested, keeping simple. If user wants empty, we leave it empty)
-    
-    // loadMaids() is called when navigating to the section, 
-    // but let's just initialize it in background
-    // loadMaids();
+    // DOM Inputs for validation
+    const fullName = document.getElementById('fullName');
+    const contactName = document.getElementById('contactName');
+    const contactEmail = document.getElementById('contactEmail');
+    const age = document.getElementById('age');
+
+    // Custom Name Validation Helper
+    const setupNameValidation = (inputElement) => {
+        if (!inputElement) return;
+        const validate = () => {
+            if (inputElement.validity.patternMismatch) {
+                inputElement.setCustomValidity("Please enter a valid name (alphabets and spaces only).");
+            } else {
+                inputElement.setCustomValidity("");
+            }
+        };
+        inputElement.addEventListener('input', validate);
+        inputElement.addEventListener('invalid', validate);
+    };
+
+    // Custom Email Validation Helper
+    const setupEmailValidation = (inputElement) => {
+        if (!inputElement) return;
+        const validate = () => {
+            if (inputElement.validity.patternMismatch) {
+                inputElement.setCustomValidity("Please enter a valid Gmail address (e.g. user@gmail.com).");
+            } else {
+                inputElement.setCustomValidity("");
+            }
+        };
+        inputElement.addEventListener('input', validate);
+        inputElement.addEventListener('invalid', validate);
+    };
+
+    // Custom Age Validation Helper
+    const setupAgeValidation = (inputElement) => {
+        if (!inputElement) return;
+        const validate = () => {
+            if (inputElement.validity.rangeUnderflow || inputElement.validity.rangeOverflow) {
+                inputElement.setCustomValidity("Age must be between 18 and 70.");
+            } else {
+                inputElement.setCustomValidity("");
+            }
+        };
+        inputElement.addEventListener('input', validate);
+        inputElement.addEventListener('invalid', validate);
+    };
+
+    // Apply validations
+    setupNameValidation(fullName);
+    setupNameValidation(contactName);
+    setupEmailValidation(contactEmail);
+    setupAgeValidation(age);
 });
 
 // Contact Form Prevent Default (Demo)
