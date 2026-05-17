@@ -87,7 +87,7 @@ maidForm.addEventListener('submit', function(e) {
         phone: document.getElementById('phone').value,
         workType: document.getElementById('workType').value,
         experience: document.getElementById('experience').value,
-        availableTime: document.getElementById('availableTime').value,
+        availableTime: `${document.getElementById('availableTimeStart').value} to ${document.getElementById('availableTimeEnd').value}`,
         expectedSalary: document.getElementById('expectedSalary').value,
         description: document.getElementById('description').value
     };
@@ -245,11 +245,49 @@ document.addEventListener('DOMContentLoaded', () => {
         inputElement.addEventListener('invalid', validate);
     };
 
+    // Custom Time Range Validation
+    const setupTimeValidation = () => {
+        const startTimeSelect = document.getElementById('availableTimeStart');
+        const endTimeSelect = document.getElementById('availableTimeEnd');
+        if (!startTimeSelect || !endTimeSelect) return;
+
+        const parseTime = (timeStr) => {
+            if (!timeStr) return 0;
+            const [time, modifier] = timeStr.split(' ');
+            let [hours, minutes] = time.split(':');
+            hours = parseInt(hours);
+            if (modifier === 'PM' && hours !== 12) {
+                hours += 12;
+            }
+            if (modifier === 'AM' && hours === 12) {
+                hours = 0;
+            }
+            return hours;
+        };
+
+        const validate = () => {
+            const startHour = parseTime(startTimeSelect.value);
+            const endHour = parseTime(endTimeSelect.value);
+
+            if (startTimeSelect.value && endTimeSelect.value) {
+                if (endHour <= startHour) {
+                    endTimeSelect.setCustomValidity("End time must be later than start time.");
+                } else {
+                    endTimeSelect.setCustomValidity("");
+                }
+            }
+        };
+
+        startTimeSelect.addEventListener('change', validate);
+        endTimeSelect.addEventListener('change', validate);
+    };
+
     // Apply validations
     setupNameValidation(fullName);
     setupNameValidation(contactName);
     setupEmailValidation(contactEmail);
     setupAgeValidation(age);
+    setupTimeValidation();
 });
 
 // Contact Form Prevent Default (Demo)
