@@ -64,7 +64,7 @@ hamburger.addEventListener('click', () => {
 });
 
 // -------------------------------------------------------------
-// Maid Registration & Data Management (Vercel KV Serverless / localStorage fallback)
+// Maid Registration & Data Management (ExtendsClass Free Cloud Database / localStorage fallback)
 // -------------------------------------------------------------
 
 const maidForm = document.getElementById('maidForm');
@@ -73,81 +73,56 @@ const noMaidsMessage = document.getElementById('noMaidsMessage');
 const searchLocation = document.getElementById('searchLocation');
 const filterWorkType = document.getElementById('filterWorkType');
 
-// Base API URL configuration
-const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-const API_URL = isLocal ? null : '/api/maids';
+// Free ExtendsClass JSON Bin Configuration
+const API_URL = 'https://extendsclass.com/api/json-storage/bin/bbbabfa';
+const API_HEADERS = {
+    'Content-Type': 'application/json',
+    'Security-key': 'homehelp123'
+};
 
-// Helper to load all maids from serverless API or LocalStorage fallback
+// Helper to load all maids from cloud database
 async function getMaids() {
-    if (!API_URL) {
-        return JSON.parse(localStorage.getItem('maids')) || [];
-    }
     try {
         const response = await fetch(API_URL);
-        if (!response.ok) {
-            const errData = await response.json();
-            if (errData.error && errData.error.includes("Database not connected")) {
-                console.warn("Vercel KV Database not connected yet. Falling back to LocalStorage.");
-            }
-            throw new Error("API not ready");
-        }
-        return await response.json();
+        if (!response.ok) throw new Error("Database not reachable");
+        const json = await response.json();
+        
+        // Ensure we handle standard return format or fallback to empty array
+        const maids = json.data || [];
+        
+        // Keep a copy in localStorage for backup
+        localStorage.setItem('maids', JSON.stringify(maids));
+        return maids;
     } catch (e) {
-        console.warn("Falling back to LocalStorage:", e);
+        console.warn("Cloud DB unavailable. Falling back to LocalStorage:", e);
         return JSON.parse(localStorage.getItem('maids')) || [];
+    }
+}
+
+// Helper to overwrite the entire maids list (for both adding and deleting)
+async function overwriteMaids(updatedList) {
+    // Save to local storage instantly as backup
+    localStorage.setItem('maids', JSON.stringify(updatedList));
+    
+    try {
+        const response = await fetch(API_URL, {
+            method: 'PUT',
+            headers: API_HEADERS,
+            body: JSON.stringify({ data: updatedList })
+        });
+        if (!response.ok) throw new Error("Cloud update failed");
+        return true;
+    } catch (e) {
+        console.warn("Overwrite failed, relying on LocalStorage:", e);
+        return true;
     }
 }
 
 // Helper to save a single new maid
 async function saveMaid(newMaid) {
-    if (!API_URL) {
-        const maids = JSON.parse(localStorage.getItem('maids')) || [];
-        maids.push(newMaid);
-        localStorage.setItem('maids', JSON.stringify(maids));
-        return true;
-    }
-    try {
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newMaid)
-        });
-        if (!response.ok) {
-            const errData = await response.json();
-            if (errData.error && errData.error.includes("Database not connected")) {
-                alert("⚠️ App is deployed but Vercel KV is not connected!\n\nTo enable the global database, please click 'Storage' -> 'Connect KV' in your Vercel Dashboard.\n\nSaving your details locally to this browser for now.");
-            }
-            throw new Error("Server error");
-        }
-        return true;
-    } catch (e) {
-        console.warn("Save failed, falling back to LocalStorage:", e);
-        const maids = JSON.parse(localStorage.getItem('maids')) || [];
-        maids.push(newMaid);
-        localStorage.setItem('maids', JSON.stringify(maids));
-        return true;
-    }
-}
-
-// Helper to overwrite the entire maids list (for deletion)
-async function overwriteMaids(updatedList) {
-    if (!API_URL) {
-        localStorage.setItem('maids', JSON.stringify(updatedList));
-        return true;
-    }
-    try {
-        const response = await fetch(API_URL, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(updatedList)
-        });
-        if (!response.ok) throw new Error("Server error");
-        return true;
-    } catch (e) {
-        console.warn("Overwrite failed, falling back to LocalStorage:", e);
-        localStorage.setItem('maids', JSON.stringify(updatedList));
-        return true;
-    }
+    const maids = await getMaids();
+    maids.push(newMaid);
+    return await overwriteMaids(maids);
 }
 
 // Handle form submission
@@ -169,7 +144,7 @@ maidForm.addEventListener('submit', async function(e) {
         description: document.getElementById('description').value
     };
 
-    // Save using hybrid API/local method
+    // Save using cloud DB
     await saveMaid(newMaid);
 
     // Show alert and reset form
