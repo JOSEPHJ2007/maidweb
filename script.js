@@ -83,7 +83,12 @@ const API_HEADERS = {
 // Helper to load all maids from cloud database
 async function getMaids() {
     try {
-        const response = await fetch(API_URL);
+        // Add timestamp to bust CDN cache
+        const cacheBuster = `?t=${Date.now()}`;
+        const response = await fetch(API_URL + cacheBuster, {
+            cache: 'no-store',
+            headers: { 'Cache-Control': 'no-cache' }
+        });
         if (!response.ok) throw new Error("Database not reachable");
         const json = await response.json();
         
@@ -107,7 +112,7 @@ async function overwriteMaids(updatedList) {
     try {
         const response = await fetch(API_URL, {
             method: 'PUT',
-            headers: API_HEADERS,
+            headers: { ...API_HEADERS, 'Cache-Control': 'no-cache' },
             body: JSON.stringify({ data: updatedList })
         });
         if (!response.ok) throw new Error("Cloud update failed");
