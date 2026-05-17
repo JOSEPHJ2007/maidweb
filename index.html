@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomeHelp Connect | Reliable Maid Services</title>
+    <meta name="description" content="Find reliable maids for your household work including cleaning, cooking, babysitting, elder care, laundry, and full house work.">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <i class="fa-solid fa-hands-holding-child"></i>
+                <h1>HomeHelp Connect</h1>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="#home" class="nav-item active" data-target="home-section">Home</a>
+                <a href="#register" class="nav-item" data-target="register-section">Register Maid</a>
+                <a href="#available" class="nav-item" data-target="available-section">Available Maids</a>
+                <a href="#about" class="nav-item" data-target="about-section">About</a>
+                <a href="#contact" class="nav-item" data-target="contact-section">Contact</a>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </nav>
+    </header>
+
+    <main id="main-content">
+        <!-- 1. HOME SECTION -->
+        <section id="home-section" class="page-section active">
+            <div class="hero">
+                <div class="hero-content">
+                    <h2>Find Reliable Maids for Your Household Work</h2>
+                    <p>HomeHelp Connect is your trusted platform to find verified and skilled maids for cleaning, cooking, babysitting, elder care, laundry, and comprehensive full house work. We make hiring easy and secure.</p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary" onclick="navigateTo('register-section')">Register as Maid</button>
+                        <button class="btn btn-secondary" onclick="navigateTo('available-section')">Find a Maid</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- How It Works -->
+            <div class="how-it-works container">
+                <h3 class="section-title">How It Works</h3>
+                <div class="steps-grid">
+                    <div class="step-card">
+                        <div class="step-icon"><i class="fa-solid fa-user-plus"></i></div>
+                        <h4>1. Register Details</h4>
+                        <p>Maid registers her details securely on our platform.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-icon"><i class="fa-solid fa-list-check"></i></div>
+                        <h4>2. View Profiles</h4>
+                        <p>Customer views available maids based on location and skills.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-icon"><i class="fa-solid fa-phone-volume"></i></div>
+                        <h4>3. Hire Easily</h4>
+                        <p>Customer calls and hires the perfect maid directly.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Services -->
+            <div class="services container">
+                <h3 class="section-title">Our Services</h3>
+                <div class="services-grid">
+                    <div class="service-card"><i class="fa-solid fa-broom"></i><span>Cleaning</span></div>
+                    <div class="service-card"><i class="fa-solid fa-utensils"></i><span>Cooking</span></div>
+                    <div class="service-card"><i class="fa-solid fa-baby-carriage"></i><span>Babysitting</span></div>
+                    <div class="service-card"><i class="fa-solid fa-wheelchair"></i><span>Elder Care</span></div>
+                    <div class="service-card"><i class="fa-solid fa-jug-detergent"></i><span>Laundry</span></div>
+                    <div class="service-card"><i class="fa-solid fa-house"></i><span>Full House Work</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. MAID REGISTRATION SECTION -->
+        <section id="register-section" class="page-section container">
+            <h2 class="section-title">Maid Registration</h2>
+            <div class="form-container">
+                <form id="maidForm">
+                    <div class="form-group">
+                        <label for="fullName">Full Name *</label>
+                        <input type="text" id="fullName" required placeholder="Enter full name">
+                    </div>
+                    <div class="form-group-row">
+                        <div class="form-group">
+                            <label for="age">Age *</label>
+                            <input type="number" id="age" required min="18" max="70" placeholder="e.g. 35">
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Gender *</label>
+                            <select id="gender" required>
+                                <option value="" disabled selected>Select Gender</option>
+                                <option value="Female">Female</option>
+                                <option value="Male">Male</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Location (City/Area) *</label>
+                        <input type="text" id="location" required placeholder="e.g. Kochi, Kerala">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number *</label>
+                        <input type="tel" id="phone" required placeholder="e.g. +91 9876543210">
+                    </div>
+                    <div class="form-group">
+                        <label for="workType">Primary Work Type *</label>
+                        <select id="workType" required>
+                            <option value="" disabled selected>Select Work Type</option>
+                            <option value="Cleaning">Cleaning</option>
+                            <option value="Cooking">Cooking</option>
+                            <option value="Babysitting">Babysitting</option>
+                            <option value="Elder Care">Elder Care</option>
+                            <option value="Laundry">Laundry</option>
+                            <option value="Full House Work">Full House Work</option>
+                        </select>
+                    </div>
+                    <div class="form-group-row">
+                        <div class="form-group">
+                            <label for="experience">Experience (Years) *</label>
+                            <input type="number" id="experience" required min="0" placeholder="e.g. 5">
+                        </div>
+                        <div class="form-group">
+                            <label for="availableTime">Available Time *</label>
+                            <input type="text" id="availableTime" required placeholder="e.g. 9 AM - 5 PM">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="expectedSalary">Expected Salary (Monthly/Daily) *</label>
+                        <input type="text" id="expectedSalary" required placeholder="e.g. ₹15,000 / month">
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Short Description *</label>
+                        <textarea id="description" rows="3" required placeholder="Briefly describe your skills..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary submit-btn">Register Details</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- 3. AVAILABLE MAIDS SECTION -->
+        <section id="available-section" class="page-section container">
+            <h2 class="section-title">Available Maids</h2>
+            
+            <div class="filter-bar">
+                <div class="search-box">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <input type="text" id="searchLocation" placeholder="Search by location...">
+                </div>
+                <div class="filter-box">
+                    <i class="fa-solid fa-filter"></i>
+                    <select id="filterWorkType">
+                        <option value="All">All Work Types</option>
+                        <option value="Cleaning">Cleaning</option>
+                        <option value="Cooking">Cooking</option>
+                        <option value="Babysitting">Babysitting</option>
+                        <option value="Elder Care">Elder Care</option>
+                        <option value="Laundry">Laundry</option>
+                        <option value="Full House Work">Full House Work</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="noMaidsMessage" class="no-data-message" style="display: none;">
+                <p>No maid details available. Please register a maid first.</p>
+            </div>
+
+            <div class="maids-grid" id="maidsGrid">
+                <!-- Maid profile cards will be generated here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- 4. ABOUT SECTION -->
+        <section id="about-section" class="page-section container">
+            <h2 class="section-title">About Us</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>HomeHelp Connect was created to bridge the gap between households seeking reliable help and domestic workers looking for fair employment. We believe in empowering workers while providing peace of mind to our customers.</p>
+                    <p>Our platform simplifies the process of finding specialized help—whether it's cooking, cleaning, child care, or comprehensive house management. Every profile is structured to give you the information you need to make the right choice for your home.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. CONTACT SECTION -->
+        <section id="contact-section" class="page-section container">
+            <h2 class="section-title">Contact Us</h2>
+            <div class="contact-wrapper">
+                <div class="contact-info">
+                    <div class="info-item">
+                        <i class="fa-solid fa-envelope"></i>
+                        <div>
+                            <h4>Email</h4>
+                            <p>homehelp@example.com</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fa-solid fa-phone"></i>
+                        <div>
+                            <h4>Phone</h4>
+                            <p>+91 9876543210</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <div>
+                            <h4>Address</h4>
+                            <p>Kerala, India</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-form-container">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="contactName">Name</label>
+                            <input type="text" id="contactName" required placeholder="Your Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="contactEmail">Email</label>
+                            <input type="email" id="contactEmail" required placeholder="Your Email">
+                        </div>
+                        <div class="form-group">
+                            <label for="contactMessage">Message</label>
+                            <textarea id="contactMessage" rows="4" required placeholder="How can we help you?"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-secondary">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 HomeHelp Connect. All Rights Reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
