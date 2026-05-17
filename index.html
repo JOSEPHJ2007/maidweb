@@ -95,12 +95,12 @@
                 <form id="maidForm">
                     <div class="form-group">
                         <label for="fullName">Full Name *</label>
-                        <input type="text" id="fullName" required placeholder="Enter full name">
+                        <input type="text" id="fullName" required placeholder="Enter full name" pattern="^[a-zA-Z\s]+$" title="Name must only contain alphabets and spaces.">
                     </div>
                     <div class="form-group-row">
                         <div class="form-group">
                             <label for="age">Age *</label>
-                            <input type="number" id="age" required min="18" max="70" placeholder="e.g. 35">
+                            <input type="number" id="age" required min="18" max="70" placeholder="e.g. 35" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                         </div>
                         <div class="form-group">
                             <label for="gender">Gender *</label>
@@ -230,11 +230,11 @@
                     <form id="contactForm">
                         <div class="form-group">
                             <label for="contactName">Name</label>
-                            <input type="text" id="contactName" required placeholder="Your Name">
+                            <input type="text" id="contactName" required placeholder="Your Name" pattern="^[a-zA-Z\s]+$" title="Name must only contain alphabets and spaces.">
                         </div>
                         <div class="form-group">
                             <label for="contactEmail">Email</label>
-                            <input type="email" id="contactEmail" required placeholder="Your Email">
+                            <input type="email" id="contactEmail" required placeholder="Your Email" pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$" title="Only @gmail.com email addresses are allowed.">
                         </div>
                         <div class="form-group">
                             <label for="contactMessage">Message</label>
