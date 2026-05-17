@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!inputElement) return;
         const validate = () => {
             if (inputElement.validity.patternMismatch) {
-                inputElement.setCustomValidity("Please enter a valid name (alphabets and spaces only).");
+                inputElement.setCustomValidity("Please enter a valid name (alphabets, spaces, dots, hyphens, or apostrophes only).");
             } else {
                 inputElement.setCustomValidity("");
             }
@@ -313,10 +313,10 @@ document.getElementById('contactForm').addEventListener('submit', (e) => {
     e.target.reset();
 });
 
-// Register Service Worker for PWA (Mobile/Desktop App Capabilities)
+// Register Service Worker for PWA (Mobile/Desktop App Capabilities) with Cache-Busting Version Query
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
+        navigator.serviceWorker.register('./sw.js?v=3')
             .then(reg => {
                 console.log('Service Worker registered successfully!', reg);
                 // Listen for updates
