@@ -202,6 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const contactName = document.getElementById('contactName');
     const contactEmail = document.getElementById('contactEmail');
     const age = document.getElementById('age');
+    const phone = document.getElementById('phone');
 
     // Custom Name Validation Helper
     const setupNameValidation = (inputElement) => {
@@ -282,11 +283,26 @@ document.addEventListener('DOMContentLoaded', () => {
         endTimeSelect.addEventListener('change', validate);
     };
 
+    // Custom Phone Validation Helper
+    const setupPhoneValidation = (inputElement) => {
+        if (!inputElement) return;
+        const validate = () => {
+            if (inputElement.validity.patternMismatch) {
+                inputElement.setCustomValidity("Please enter a valid phone number (e.g. +91 9876543210 or 9876543210).");
+            } else {
+                inputElement.setCustomValidity("");
+            }
+        };
+        inputElement.addEventListener('input', validate);
+        inputElement.addEventListener('invalid', validate);
+    };
+
     // Apply validations
     setupNameValidation(fullName);
     setupNameValidation(contactName);
     setupEmailValidation(contactEmail);
     setupAgeValidation(age);
+    setupPhoneValidation(phone);
     setupTimeValidation();
 });
 
