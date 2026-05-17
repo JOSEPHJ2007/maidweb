@@ -1,5 +1,6 @@
 // DOM Elements
 const navLinks = document.querySelectorAll('.nav-item');
+const mobileNavLinks = document.querySelectorAll('.mobile-nav-item');
 const sections = document.querySelectorAll('.page-section');
 const hamburger = document.getElementById('hamburger');
 const navLinksContainer = document.getElementById('navLinks');
@@ -11,8 +12,11 @@ function navigateTo(sectionId) {
         section.classList.remove('active');
     });
 
-    // Remove active class from all links
+    // Remove active class from all desktop and mobile links
     navLinks.forEach(link => {
+        link.classList.remove('active');
+    });
+    mobileNavLinks.forEach(link => {
         link.classList.remove('active');
     });
 
@@ -22,6 +26,9 @@ function navigateTo(sectionId) {
     // Add active class to corresponding link
     const activeLink = document.querySelector(`.nav-item[data-target="${sectionId}"]`);
     if(activeLink) activeLink.classList.add('active');
+
+    const activeMobileLink = document.querySelector(`.mobile-nav-item[data-target="${sectionId}"]`);
+    if(activeMobileLink) activeMobileLink.classList.add('active');
 
     // Close hamburger menu on mobile
     if (window.innerWidth <= 768) {
@@ -34,8 +41,16 @@ function navigateTo(sectionId) {
     }
 }
 
-// Event Listeners for Navigation
+// Event Listeners for Navigation (Desktop & Mobile)
 navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetSection = link.getAttribute('data-target');
+        navigateTo(targetSection);
+    });
+});
+
+mobileNavLinks.forEach(link => {
     link.addEventListener('click', (e) => {
         e.preventDefault();
         const targetSection = link.getAttribute('data-target');
@@ -196,3 +211,12 @@ document.getElementById('contactForm').addEventListener('submit', (e) => {
     alert('Thank you for your message! We will get back to you soon.');
     e.target.reset();
 });
+
+// Register Service Worker for PWA (Mobile/Desktop App Capabilities)
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+            .then(reg => console.log('Service Worker registered successfully!', reg))
+            .catch(err => console.log('Service Worker registration failed:', err));
+    });
+}

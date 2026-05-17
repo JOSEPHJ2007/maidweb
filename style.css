@@ -525,4 +525,58 @@ footer {
     .hero-buttons {
         flex-direction: column;
     }
+    
+    /* Hide top nav items and hamburger entirely on mobile for native feel */
+    .navbar .nav-links, .navbar .hamburger {
+        display: none !important;
+    }
+    
+    /* Body padding to prevent bottom nav overlapping content */
+    body {
+        padding-bottom: 75px;
+    }
+    
+    /* Mobile Bottom Navigation Styles */
+    .mobile-bottom-nav {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 65px;
+        background-color: var(--white);
+        box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.08);
+        justify-content: space-around;
+        align-items: center;
+        z-index: 1000;
+        border-top: 1px solid var(--border-color);
+        padding: 5px 0;
+    }
+    
+    .mobile-nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        color: var(--text-light);
+        font-size: 0.7rem;
+        font-weight: 600;
+        flex: 1;
+        transition: var(--transition);
+        gap: 3px;
+    }
+    
+    .mobile-nav-item i {
+        font-size: 1.25rem;
+    }
+    
+    .mobile-nav-item:hover, .mobile-nav-item.active {
+        color: var(--primary-blue);
+    }
+}
+
+/* Mobile Bottom Nav Hidden on Desktop */
+.mobile-bottom-nav {
+    display: none;
 }

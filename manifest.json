@@ -1,0 +1,23 @@
+{
+  "name": "HomeHelp Connect",
+  "short_name": "HomeHelp",
+  "description": "Find verified and reliable maids, cooks, babysitters, and elder care workers near you.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f4f7f6",
+  "theme_color": "#0056b3",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3655/3655581.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/192/3655/3655581.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

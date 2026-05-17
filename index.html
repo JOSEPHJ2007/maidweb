@@ -10,6 +10,12 @@
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <!-- PWA Integration -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0056b3">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/192/3655/3655581.png">
 </head>
 <body>
     <!-- Navigation Bar -->
@@ -244,6 +250,30 @@
     <footer>
         <p>&copy; 2026 HomeHelp Connect. All Rights Reserved.</p>
     </footer>
+
+    <!-- Mobile Bottom Navigation Bar -->
+    <div class="mobile-bottom-nav">
+        <a href="#home" class="mobile-nav-item active" data-target="home-section">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </a>
+        <a href="#register" class="mobile-nav-item" data-target="register-section">
+            <i class="fa-solid fa-user-plus"></i>
+            <span>Register</span>
+        </a>
+        <a href="#available" class="mobile-nav-item" data-target="available-section">
+            <i class="fa-solid fa-users"></i>
+            <span>Maids</span>
+        </a>
+        <a href="#about" class="mobile-nav-item" data-target="about-section">
+            <i class="fa-solid fa-info-circle"></i>
+            <span>About</span>
+        </a>
+        <a href="#contact" class="mobile-nav-item" data-target="contact-section">
+            <i class="fa-solid fa-envelope"></i>
+            <span>Contact</span>
+        </a>
+    </div>
 
     <script src="script.js"></script>
 </body>
