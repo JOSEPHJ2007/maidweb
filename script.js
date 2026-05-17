@@ -64,7 +64,7 @@ hamburger.addEventListener('click', () => {
 });
 
 // -------------------------------------------------------------
-// Maid Registration & Data Management (ExtendsClass Free Cloud Database / localStorage fallback)
+// Maid Registration & Data Management (localStorage)
 // -------------------------------------------------------------
 
 const maidForm = document.getElementById('maidForm');
@@ -73,70 +73,13 @@ const noMaidsMessage = document.getElementById('noMaidsMessage');
 const searchLocation = document.getElementById('searchLocation');
 const filterWorkType = document.getElementById('filterWorkType');
 
-// Free ExtendsClass JSON Bin Configuration
-const API_URL = 'https://extendsclass.com/api/json-storage/bin/bbbabfa';
-const API_HEADERS = {
-    'Content-Type': 'application/json',
-    'Security-key': 'homehelp123'
-};
-
-// Helper to load all maids from cloud database
-async function getMaids() {
-    try {
-        // Add timestamp to bust CDN cache
-        const cacheBuster = `?t=${Date.now()}`;
-        const response = await fetch(API_URL + cacheBuster, {
-            cache: 'no-store',
-            headers: { 'Cache-Control': 'no-cache' }
-        });
-        if (!response.ok) throw new Error("Database not reachable");
-        const json = await response.json();
-        
-        // Ensure we handle standard return format or fallback to empty array
-        const maids = json.data || [];
-        
-        // Keep a copy in localStorage for backup
-        localStorage.setItem('maids', JSON.stringify(maids));
-        return maids;
-    } catch (e) {
-        console.warn("Cloud DB unavailable. Falling back to LocalStorage:", e);
-        return JSON.parse(localStorage.getItem('maids')) || [];
-    }
-}
-
-// Helper to overwrite the entire maids list (for both adding and deleting)
-async function overwriteMaids(updatedList) {
-    // Save to local storage instantly as backup
-    localStorage.setItem('maids', JSON.stringify(updatedList));
-    
-    try {
-        const response = await fetch(API_URL, {
-            method: 'PUT',
-            headers: { ...API_HEADERS, 'Cache-Control': 'no-cache' },
-            body: JSON.stringify({ data: updatedList })
-        });
-        if (!response.ok) throw new Error("Cloud update failed");
-        return true;
-    } catch (e) {
-        console.warn("Overwrite failed, relying on LocalStorage:", e);
-        return true;
-    }
-}
-
-// Helper to save a single new maid
-async function saveMaid(newMaid) {
-    const maids = await getMaids();
-    maids.push(newMaid);
-    return await overwriteMaids(maids);
-}
-
 // Handle form submission
-maidForm.addEventListener('submit', async function(e) {
+maidForm.addEventListener('submit', function(e) {
     e.preventDefault();
 
     // Get form values
     const newMaid = {
-        id: Date.now().toString(), // Unique ID
+        id: Date.now().toString(),
         name: document.getElementById('fullName').value,
         age: document.getElementById('age').value,
         gender: document.getElementById('gender').value,
@@ -149,8 +92,10 @@ maidForm.addEventListener('submit', async function(e) {
         description: document.getElementById('description').value
     };
 
-    // Save using cloud DB
-    await saveMaid(newMaid);
+    // Save to localStorage
+    let maids = JSON.parse(localStorage.getItem('maids')) || [];
+    maids.push(newMaid);
+    localStorage.setItem('maids', JSON.stringify(maids));
 
     // Show alert and reset form
     alert('Maid details added successfully');
@@ -158,18 +103,19 @@ maidForm.addEventListener('submit', async function(e) {
 
     // Navigate to available maids page to see the new entry
     navigateTo('available-section');
+    loadMaids();
 });
 
-// Load maids and display them
-async function loadMaids() {
-    const maids = await getMaids();
+// Load maids from localStorage and display them
+function loadMaids() {
+    const maids = JSON.parse(localStorage.getItem('maids')) || [];
     
     // Apply filters
     const searchTerm = searchLocation.value.toLowerCase();
     const filterType = filterWorkType.value;
 
     const filteredMaids = maids.filter(maid => {
-        const matchesLocation = maid.location.toLowerCase().includes(searchTerm);
+    const matchesLocation = searchTerm ? maid.location.toLowerCase().includes(searchTerm) : true;
         const matchesType = (filterType === 'All') || (maid.workType === filterType);
         return matchesLocation && matchesType;
     });
@@ -237,11 +183,11 @@ function renderMaids(maidsArray) {
 }
 
 // Delete a maid
-async function deleteMaid(id) {
+function deleteMaid(id) {
     if (confirm('Are you sure you want to delete this maid profile?')) {
-        let maids = await getMaids();
+        let maids = JSON.parse(localStorage.getItem('maids')) || [];
         maids = maids.filter(maid => maid.id !== id);
-        await overwriteMaids(maids);
+        localStorage.setItem('maids', JSON.stringify(maids));
         loadMaids(); // Reload the grid
     }
 }
@@ -352,13 +298,8 @@ document.addEventListener('DOMContentLoaded', () => {
         inputElement.addEventListener('invalid', validate);
     };
 
-    // Apply validations
-    setupNameValidation(fullName);
-    setupNameValidation(contactName);
-    setupEmailValidation(contactEmail);
-    setupAgeValidation(age);
-    setupPhoneValidation(phone);
-    setupTimeValidation();
+    // Initialize maid list
+    loadMaids();
 });
 
 // Contact Form Prevent Default (Demo)
@@ -368,34 +309,12 @@ document.getElementById('contactForm').addEventListener('submit', (e) => {
     e.target.reset();
 });
 
-// Register Service Worker for PWA (Mobile/Desktop App Capabilities) with Cache-Busting Version Query
+// Unregister any existing Service Workers to prevent caching issues on desktop
 if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js?v=3')
-            .then(reg => {
-                console.log('Service Worker registered successfully!', reg);
-                // Listen for updates
-                reg.addEventListener('updatefound', () => {
-                    const newWorker = reg.installing;
-                    if (newWorker) {
-                        newWorker.addEventListener('statechange', () => {
-                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                console.log('New service worker available, prompting reload...');
-                                window.location.reload();
-                            }
-                        });
-                    }
-                });
-            })
-            .catch(err => console.log('Service Worker registration failed:', err));
-    });
-
-    // Handle service worker updates immediately
-    let refreshing = false;
-    navigator.serviceWorker.addEventListener('controllerchange', () => {
-        if (!refreshing) {
-            refreshing = true;
-            window.location.reload();
+    navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for (let registration of registrations) {
+            registration.unregister();
+            console.log('Service Worker unregistered to clear cache.');
         }
     });
 }
